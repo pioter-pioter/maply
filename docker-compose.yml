@@ -1,0 +1,47 @@
+version: "3.0"
+services:
+
+  db-redis:
+    image: redis
+    networks:
+      - server-network
+
+  maply-position-service:
+    build:
+      context: ./maply-position-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_REDIS_URL: redis://db-redis:6379
+    networks:
+      - server-network
+    depends_on:
+      - db-redis
+
+  db-mysql:
+    image: mysql
+    networks:
+      - server-network
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: piotr
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: maply
+
+  maply-user-service:
+    build:
+      context: ./maply-user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - server-network
+    environment:
+      SPRING_R2DBC_URL: r2dbc:mysql://db-mysql:3306/maply
+    depends_on:
+      - db-mysql
+
+networks:
+  server-network:
+    driver: bridge

@@ -1,0 +1,32 @@
+<div class='container'>
+    <div class="row my-3">
+        <div *ngIf="users.length == 0; else elseBlock">
+            Waiting for data to arrive...
+        </div>
+        <ng-template #elseBlock>
+            <div *ngFor="let user of users" class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3">
+                <div class="card border-secondary mb-3">
+                    <div class="card-header">
+                        <a routerLink="/user/{{user.value.username}}">
+                            @{{user.value.username}}
+                        </a>
+                    </div>
+                    <div class="card-body text-secondary">
+                        <p class="card-text">
+                            Latitude: {{user.value.lat}}
+                        </p>
+                        <p class="card-text">
+                            Longitude: {{user.value.lng}}
+                        </p>
+                        <p class="card-text">
+                            Date: {{user.id.timestamp | date:'dd/MM/yyyy'}}
+                        </p>
+                        <p class="card-text">
+                            Time: {{user.id.timestamp | date:'hh:mm:ss'}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
