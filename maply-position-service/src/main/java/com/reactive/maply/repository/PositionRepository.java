@@ -15,18 +15,18 @@ import java.util.Optional;
 
 @Repository
 public class PositionRepository {
+
     private ReactiveStreamOperations<String, String, String> reactiveStreamOperations;
     public PositionRepository(ReactiveRedisTemplate<String, String> reactiveRedisTemplate) {
         this.reactiveStreamOperations = reactiveRedisTemplate.opsForStream();
     }
+
     public Mono<RecordId> add(String streamKey, PositionEntity positionEntity) {
         return reactiveStreamOperations.add(ObjectRecord.create(streamKey, positionEntity));
     }
+
     @SuppressWarnings("unchecked")
-    public Flux<ObjectRecord<String, PositionEntity>> range(String streamKey,
-                                                            Optional<String> from,
-                                                            Optional<String> to,
-                                                            Optional<String> username) {
+    public Flux<ObjectRecord<String, PositionEntity>> range(String streamKey, Optional<String> from, Optional<String> to, Optional<String> username) {
         RecordId left = from
                 .map(RecordId::of)
                 .orElse(RecordId.of("0-0"));
@@ -44,4 +44,5 @@ public class PositionRepository {
         }
         return returnFlux;
     }
+
 }

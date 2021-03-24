@@ -10,10 +10,12 @@ import reactor.core.publisher.Flux;
 
 @Service
 public class PositionStreamService {
+
     private ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
     public PositionStreamService(ReactiveRedisTemplate<String, String> reactiveRedisTemplate) {
         this.reactiveRedisTemplate = reactiveRedisTemplate;
     }
+
     public Flux<ObjectRecord<String, PositionEntity>> listen(String streamKey) {
         StreamReceiver.StreamReceiverOptions<String, ObjectRecord<String, PositionEntity>> options
                 = StreamReceiver.StreamReceiverOptions.builder().targetType(PositionEntity.class).build();
@@ -22,5 +24,6 @@ public class PositionStreamService {
         return streamReceiver
                 .receive(StreamOffset.latest(streamKey));
     }
+
 }
 

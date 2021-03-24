@@ -10,13 +10,16 @@ import reactor.core.publisher.Flux;
 @RestController
 @CrossOrigin(origins = "*")
 public class PositionStreamController {
+
     private PositionStreamService positionStreamService;
     public PositionStreamController(PositionStreamService positionStreamService) {
         this.positionStreamService = positionStreamService;
     }
+
     @GetMapping(path="/sse/position/{streamKey}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ObjectRecord<String, PositionEntity>> listen(@PathVariable String streamKey) {
         return positionStreamService.listen(streamKey);
     }
+
 }
 

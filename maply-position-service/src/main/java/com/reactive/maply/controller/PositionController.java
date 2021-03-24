@@ -14,14 +14,17 @@ import java.util.Optional;
 @RequestMapping(value = "/api/position/{streamKey}")
 @CrossOrigin(origins = "*")
 public class PositionController {
+
     private PositionRepository positionRepository;
     public PositionController(PositionRepository positionRepository) {
         this.positionRepository = positionRepository;
     }
+
     @PostMapping
     public Mono<RecordId> publish(@PathVariable String streamKey, @RequestBody PositionEntity positionEntity) {
         return positionRepository.add(streamKey, positionEntity);
     }
+
     @GetMapping
     public Flux<ObjectRecord<String, PositionEntity>> range(@PathVariable String streamKey,
                                                             @RequestParam Optional<String> from,
@@ -29,5 +32,6 @@ public class PositionController {
                                                             @RequestParam Optional<String> username) {
         return positionRepository.range(streamKey, from, to, username);
     }
+
 }
 
