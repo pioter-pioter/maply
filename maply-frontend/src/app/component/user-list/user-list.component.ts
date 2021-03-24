@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { PositionService, StreamData } from 'src/app/service/position.service';
-import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-user-list',
@@ -9,23 +8,17 @@ import { UserService } from 'src/app/service/user.service';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit, OnDestroy {
-  
   users: StreamData[] = [];
   private eventSource$: Observable<StreamData>;
   private eventSourceSubscription$: Subscription;
-
-  constructor(private userService: UserService,
-              private positionService: PositionService) { }
-              
-  ngOnDestroy(): void {
-    this.eventSourceSubscription$.unsubscribe();
-  }
-
+  constructor(private positionService: PositionService) { }
   ngOnInit(): void {
     this.eventSource$ = this.positionService.getDataFromEventSource('stream-1');
     this.getDataFromEventSource();
+  }   
+  ngOnDestroy(): void {
+    this.eventSourceSubscription$.unsubscribe();
   }
-
   getDataFromEventSource() {
     this.eventSourceSubscription$ = this.eventSource$.subscribe(
       (streamData: StreamData) => {
@@ -43,5 +36,4 @@ export class UserListComponent implements OnInit, OnDestroy {
       }
     });
   }
-
 }

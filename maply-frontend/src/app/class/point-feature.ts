@@ -6,7 +6,6 @@ export class PointFeature implements Feature<Point, StreamData> {
     geometry: Point;
     id?: string | number;
     properties: StreamData;
-
     constructor(streamData: StreamData) {
       this.type = 'Feature';
       this.id = streamData.id.value;
@@ -16,5 +15,5 @@ export class PointFeature implements Feature<Point, StreamData> {
         coordinates: [this.properties.value.lng, this.properties.value.lat]
       }
     }
-
 }
+

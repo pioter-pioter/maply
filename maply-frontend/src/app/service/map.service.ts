@@ -6,9 +6,7 @@ import { Map } from 'mapbox-gl';
   providedIn: 'root'
 })
 export class MapService {
-
   constructor() { }
-
   getMap(): Map {
     const lat: number = 50.049683;
     const lng: number = 19.944544;
@@ -22,5 +20,5 @@ export class MapService {
     });
     return m;
   }
-
 }
+

@@ -9,7 +9,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
 public class RouterConfiguration {
-
     @Bean
     public RouterFunction<ServerResponse> routes(UserHandler userHandler) {
         return RouterFunctions.route().path(
@@ -19,5 +18,5 @@ public class RouterConfiguration {
                         .GET(userHandler::findAll)
         ).build();
     }
-
 }
+

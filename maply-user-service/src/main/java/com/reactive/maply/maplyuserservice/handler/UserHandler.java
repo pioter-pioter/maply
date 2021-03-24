@@ -12,24 +12,23 @@ import static org.springframework.web.reactive.function.server.ServerResponse.*;
 
 @Component
 public class UserHandler {
-
-    UserRepository userRepository;
-
+    private UserRepository userRepository;
     public UserHandler(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
     public Mono<ServerResponse> findOne(ServerRequest request) {
         String username = request.pathVariable("username");
         return userRepository
                 .findByUsername(username)
-                .flatMap(user -> ok().contentType(MediaType.APPLICATION_JSON).bodyValue(user))
+                .flatMap(user -> ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(user))
                 .switchIfEmpty(notFound().build());
     }
-
     public Mono<ServerResponse> findAll(ServerRequest request) {
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userRepository.findAll(), UserEntity.class);
     }
 }
+

@@ -1,6 +1,6 @@
 package com.reactive.maply.repository;
 
-import com.reactive.maply.model.Request;
+import com.reactive.maply.model.PositionEntity;
 import org.springframework.data.domain.Range;
 import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.connection.stream.ObjectRecord;
@@ -15,30 +15,33 @@ import java.util.Optional;
 
 @Repository
 public class PositionRepository {
-
     private ReactiveStreamOperations<String, String, String> reactiveStreamOperations;
-
     public PositionRepository(ReactiveRedisTemplate<String, String> reactiveRedisTemplate) {
         this.reactiveStreamOperations = reactiveRedisTemplate.opsForStream();
     }
-
-    public Flux<ObjectRecord<String, Request>> range(String streamKey,
-                                                     Optional<String> from,
-                                                     Optional<String> to,
-                                                     Optional<String> username) {
-        RecordId left = from.map(RecordId::of).orElse(RecordId.of("0-0"));
-        RecordId right = to.map(RecordId::of).orElse(RecordId.of(System.currentTimeMillis(), 0));
-        Range range = Range.from(Range.Bound.inclusive(left.getValue())).to(Range.Bound.inclusive(right.getValue()));
+    public Mono<RecordId> add(String streamKey, PositionEntity positionEntity) {
+        return reactiveStreamOperations.add(ObjectRecord.create(streamKey, positionEntity));
+    }
+    @SuppressWarnings("unchecked")
+    public Flux<ObjectRecord<String, PositionEntity>> range(String streamKey,
+                                                            Optional<String> from,
+                                                            Optional<String> to,
+                                                            Optional<String> username) {
+        RecordId left = from
+                .map(RecordId::of)
+                .orElse(RecordId.of("0-0"));
+        RecordId right = to
+                .map(RecordId::of)
+                .orElse(RecordId.of(System.currentTimeMillis(), 0));
+        Range range = Range
+                .from(Range.Bound.inclusive(left.getValue()))
+                .to(Range.Bound.inclusive(right.getValue()));
         RedisZSetCommands.Limit limit = RedisZSetCommands.Limit.limit().count(20);
-        Flux<ObjectRecord<String, Request>> returnFlux = reactiveStreamOperations.reverseRange(Request.class, streamKey, range, limit);
+        Flux<ObjectRecord<String, PositionEntity>> returnFlux
+                = reactiveStreamOperations.reverseRange(PositionEntity.class, streamKey, range, limit);
         if (username.isPresent()) {
             returnFlux = returnFlux.filter(or -> or.getValue().getUsername().equals(username.get()));
         }
         return returnFlux;
     }
-
-    public Mono<RecordId> add(String streamKey, Request request) {
-        return reactiveStreamOperations.add(ObjectRecord.create(streamKey, request));
-    }
-
 }

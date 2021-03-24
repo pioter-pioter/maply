@@ -20,3 +20,9 @@ logging:
       springframework:
         data:
           r2dbc: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

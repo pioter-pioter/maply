@@ -2,7 +2,7 @@ package com.reactive.maply.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reactive.maply.model.Request;
+import com.reactive.maply.model.PositionEntity;
 import com.reactive.maply.repository.PositionRepository;
 import com.reactive.maply.service.PositionStreamService;
 import org.springframework.context.annotation.Bean;
@@ -33,30 +33,29 @@ public class WebSocketConfiguration {
         return new WebSocketHandlerAdapter();
     }
 
-
     @Bean
-    public WebSocketHandler webSocketHandler(ObjectMapper objectMapper, PositionStreamService positionStreamService, PositionRepository positionRepository) {
+    public WebSocketHandler webSocketHandler(ObjectMapper objectMapper,
+                                             PositionStreamService positionStreamService,
+                                             PositionRepository positionRepository) {
         return new WebSocketHandler() {
             @Override
             public Mono<Void> handle(WebSocketSession webSocketSession) {
-
                 List<String> path = Arrays.asList(webSocketSession.getHandshakeInfo().getUri().getPath().split("/"));
                 String streamId = path.get(path.size()-1);
-
                 Mono<Void> in = webSocketSession
                         .receive()
                         .doOnNext(webSocketMessage -> {
                             try {
-                                Request request = objectMapper.readValue(webSocketMessage.getPayloadAsText(), Request.class);
-                                positionRepository.add(streamId, request).subscribe();
+                                PositionEntity positionEntity
+                                        = objectMapper.readValue(webSocketMessage.getPayloadAsText(), PositionEntity.class);
+                                positionRepository.add(streamId, positionEntity).subscribe();
                             } catch (JsonProcessingException e) {
                                 e.printStackTrace();
                             }
                         })
                         .then();
-
                 Flux<WebSocketMessage> outputStream = positionStreamService
-                        .subscribe(streamId)
+                        .listen(streamId)
                         .map(mapRecord -> {
                             try {
                                 return webSocketSession.textMessage(objectMapper.writeValueAsString(mapRecord));
@@ -65,12 +64,9 @@ public class WebSocketConfiguration {
                                 throw new RuntimeException(e);
                             }
                         });
-
                 Mono<Void> out = webSocketSession.send(outputStream);
-
                 return Mono.zip(in, out).then();
-            }
-        };
+            }};
     }
 
     @Bean

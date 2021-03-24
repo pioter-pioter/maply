@@ -16,43 +16,36 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private map: M.Map;
   private webSocketSubject$: WebSocketSubject<StreamData | RequestData>;
-
   constructor(private positionService: PositionService,
               private mapService: MapService) { }
-
   ngOnInit(): void {
     this.loadMap();
     this.webSocketSubject$ = this.positionService.getWebSocket('stream-1');
     this.getDataFromWebSocket();
   }
-
   ngOnDestroy(): void {
     this.webSocketSubject$.unsubscribe();
   }
 
   loadMap() {
-
     this.map = this.mapService.getMap();
-
     this.map.on('load', () => {
-      
       this.map.addControl(new M.NavigationControl());
-    
       this.map.loadImage('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
         (error, image) => {
           if (error) throw error;
           this.map.addImage('marker', image);
-
           this.map.on('click', (e: M.MapMouseEvent) => {
             this.sendDataToWebSocket(new RequestData('Piotr', e.lngLat));
           });
-  
         });
-
     })
-
   }
 
+  sendDataToWebSocket(req: RequestData) {
+    this.webSocketSubject$.next(req);
+  }
+  
   getDataFromWebSocket() {
     this.webSocketSubject$
       .pipe(
@@ -88,9 +81,4 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       });
   }
-
-  sendDataToWebSocket(req: RequestData) {
-    this.webSocketSubject$.next(req);
-  }
-
 }

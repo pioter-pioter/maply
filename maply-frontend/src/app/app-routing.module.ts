@@ -5,25 +5,16 @@ import { UserDetailsComponent } from './component/user-details/user-details.comp
 
 
 const routes: Routes = [
-  {
-    path: "positions",
-    component: MapComponent
-  },
-  
-  {
-    path: "user/:username",
-    component: UserDetailsComponent
-  },
-  {
-    path: "",
+  {path: "positions",
+    component: MapComponent},
+  {path: "user/:username",
+    component: UserDetailsComponent},
+  {path: "",
     redirectTo: "/positions",
-    pathMatch: "full" 
-  },
-  {
-    path: "**",
+    pathMatch: "full"},
+  {path: "**",
     redirectTo: "/positions",
-    pathMatch: "full" 
-  },
+    pathMatch: "full"}
 ];
 
 @NgModule({

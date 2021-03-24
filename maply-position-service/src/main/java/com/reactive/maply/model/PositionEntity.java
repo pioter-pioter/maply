@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Request {
-
+public class PositionEntity {
     private String username;
     private Double lat;
     private Double lng;
-
 }
