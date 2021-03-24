@@ -34,16 +34,14 @@ public class Runner implements CommandLineRunner {
     private static class Coordinates {
 
         private Double x;
-
         private Double y;
-
         private String username;
 
-        public Double getX() {
+        Double getX() {
             return x;
         }
 
-        public Double getY() {
+        Double getY() {
             return y;
         }
 
