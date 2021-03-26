@@ -14,9 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @WebFluxTest
 @ExtendWith(SpringExtension.class)
@@ -48,20 +45,3 @@ class UserHandlerTest {
                 .jsonPath("$.email").isEqualTo("maciej@gmail.com");
     }
 }
-
-
-
-/*    @Test
-    void findOneStepVerifier() {
-        final String username = "Maciej";
-        UserEntity userEntity = new UserEntity(1L, username,"Maciej",
-                "Kwiatkowski", "maciej@gmail.com");
-        Mono<UserEntity> userEntityMono = Mono.just(userEntity);
-        Mockito
-                .when(userRepository.findByUsername(username))
-                .thenReturn(userEntityMono);
-        StepVerifier.create(userRepository.findByUsername(username))
-                .expectSubscription()
-                .expectNext(userEntity)
-                .verifyComplete();
-    }*/

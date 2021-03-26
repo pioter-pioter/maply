@@ -14,6 +14,27 @@ public class RouterConfiguration {
                         .path("/api/position/**")
                         .or()
                         .path("/sse/position/**")
+                        .uri("http://maply-position-service:8081"))
+                .route(ps -> ps
+                        .path("/ws/position/**")
+                        .uri("ws://maply-position-service:8081"))
+                .route(ps -> ps
+                        .path("/api/users/**")
+                        .uri("http://maply-user-service:8082"))
+                .build();
+    }
+}
+
+
+/*@Configuration
+public class RouterConfiguration {
+    @Bean
+    public RouteLocator routeLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route(ps -> ps
+                        .path("/api/position/**")
+                        .or()
+                        .path("/sse/position/**")
                         .uri("http://localhost:8081"))
                 .route(ps -> ps
                         .path("/ws/position/**")
@@ -23,5 +44,4 @@ public class RouterConfiguration {
                         .uri("http://localhost:8082"))
                 .build();
     }
-}
-
+}*/

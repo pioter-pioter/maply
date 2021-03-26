@@ -9,11 +9,13 @@ import { RequestData } from '../class/request-data';
   providedIn: 'root'
 })
 export class PositionService {
+
   constructor(private http: HttpClient) { }
+
   getDataFromEventSource(streamId: string): Observable<StreamData> {
     return new Observable<StreamData>((subscriber) => {
       let es: EventSource;
-      es = new EventSource(`http://localhost:8080/sse/position/${streamId}`);
+      es = new EventSource(`${e.environment.gatewayPositionSse}${streamId}`);
       es.onmessage = (messageEvent: MessageEvent) => {
         let sd: StreamData = JSON.parse(messageEvent.data);
         subscriber.next(sd);
@@ -24,11 +26,13 @@ export class PositionService {
       }
     })
   }
+
   getWebSocket(streamId: string): WebSocketSubject<StreamData | RequestData> {
     return webSocket({
-      url: `ws://localhost:8080/ws/position/${streamId}`
+      url: `${e.environment.gatewayPositionWs}${streamId}`
     })
   }
+
   getDataFromStream(streamId: string, 
     from?: number, 
     to?: number, 
@@ -37,10 +41,11 @@ export class PositionService {
     from && (p = p.append('from', `${from}-0`));
     to && (p = p.append('to', `${to}-0`));
     username && (p = p.append('username', `${username}`));
-    return this.http.get<StreamData[]>(`http://localhost:8080/api/position/${streamId}`, {
+    return this.http.get<StreamData[]>(`${e.environment.gatewayPositionApi}${streamId}`, {
       params: p
     });
   }
+  
 }
 
 export interface StreamData {
@@ -56,9 +61,3 @@ export interface StreamData {
     sequence: string
   }
 }
-
-
-
-      //let es: EventSource = new EventSource(`${e.environment.eventSource}${streamId}`);
-      //url: `${e.environment.webSocket}${streamId}`
-    //return this.http.get<StreamData[]>(`${e.environment.positionApi}${streamId}`, {

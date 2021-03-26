@@ -37,11 +37,11 @@ public class Runner implements CommandLineRunner {
         private Double y;
         private String username;
 
-        Double getX() {
+        public Double getX() {
             return x;
         }
 
-        Double getY() {
+        public Double getY() {
             return y;
         }
 
@@ -71,7 +71,6 @@ public class Runner implements CommandLineRunner {
             Flux
                     .interval(Duration.ofSeconds(5))
                     .zipWith(coordinatesFlux, (tick, coordinate) -> {
-                        System.out.println(String.format("Flux tick: %s, thread id: %s, {lat = %s, lng = %s}", tick, Thread.currentThread().getId(), coordinate.getX(), coordinate.getY()));
                         return webClient
                                 .post()
                                 .contentType(MediaType.APPLICATION_JSON)

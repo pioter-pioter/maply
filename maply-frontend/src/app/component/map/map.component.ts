@@ -9,8 +9,7 @@ import { PointFeature } from 'src/app/class/point-feature';
 
 @Component({
   selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  templateUrl: './map.component.html'
 })
 export class MapComponent implements OnInit, OnDestroy {
 
@@ -18,11 +17,13 @@ export class MapComponent implements OnInit, OnDestroy {
   private webSocketSubject$: WebSocketSubject<StreamData | RequestData>;
   constructor(private positionService: PositionService,
               private mapService: MapService) { }
+
   ngOnInit(): void {
     this.loadMap();
     this.webSocketSubject$ = this.positionService.getWebSocket('stream-1');
     this.getDataFromWebSocket();
   }
+
   ngOnDestroy(): void {
     this.webSocketSubject$.unsubscribe();
   }
@@ -81,4 +82,5 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       });
   }
+  
 }

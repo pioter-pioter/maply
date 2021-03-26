@@ -6,21 +6,24 @@ import { UserData, UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-user-details',
-  templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.css']
+  templateUrl: './user-details.component.html'
 })
 export class UserDetailsComponent implements OnInit {
+
   userData: UserData;
   positionHistory: StreamData[] = [];
+
   constructor(private userService: UserService,
               private positionService: PositionService,
               private route: ActivatedRoute) { }
+
   ngOnInit(): void {
     this.route.paramMap.subscribe(
       paramMap => {
         this.getData(paramMap.get('username'));
       });
   }
+
   getData(username: string) {
     forkJoin({
       user: this.userService.getUserByUsername(username),
@@ -34,5 +37,6 @@ export class UserDetailsComponent implements OnInit {
       }
     )
   }
+  
 }
 

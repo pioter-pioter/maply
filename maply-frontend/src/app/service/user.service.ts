@@ -7,13 +7,17 @@ import * as e from '../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
+
   constructor(private http: HttpClient) { }
+
   getUsers(): Observable<UserData[]> {
-    return this.http.get<UserData[]>(`http://localhost:8080/api/users/`);
+    return this.http.get<UserData[]>(`${e.environment.gatewayUserApi}`);
   }
+
   getUserByUsername(username: string): Observable<UserData> {
-    return this.http.get<UserData>(`http://localhost:8080/api/users/${username}`);
+    return this.http.get<UserData>(`${e.environment.gatewayUserApi}${username}`);
   }
+  
 }
 
 export interface UserData {
@@ -23,8 +27,3 @@ export interface UserData {
   lastName: string,
   email: string
 }
-
-
-
-    //return this.http.get<UserData[]>(`${e.environment.userApi}`);
-    //return this.http.get<UserData>(`${e.environment.userApi}${username}`);

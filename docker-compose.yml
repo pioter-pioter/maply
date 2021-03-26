@@ -3,24 +3,26 @@ services:
 
   db-redis:
     image: redis
+    container_name: db-redis
     networks:
       - server-network
 
   maply-position-service:
-    build:
-      context: ./maply-position-service
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8081"
+    build: ./maply-position-service
+    image: maply-position-service
+    container_name: maply-position-service
     environment:
       SPRING_REDIS_URL: redis://db-redis:6379
     networks:
       - server-network
+    expose: 
+      - "8081"
     depends_on:
       - db-redis
 
   db-mysql:
     image: mysql
+    container_name: db-mysql
     networks:
       - server-network
     environment:
@@ -30,17 +32,29 @@ services:
       MYSQL_DATABASE: maply
 
   maply-user-service:
-    build:
-      context: ./maply-user-service
-      dockerfile: Dockerfile
-    ports:
-      - "8082:8082"
+    build: ./maply-user-service
+    image: maply-user-service
+    container_name: maply-user-service
     networks:
       - server-network
+    expose: 
+      - "8082"
     environment:
       SPRING_R2DBC_URL: r2dbc:mysql://db-mysql:3306/maply
     depends_on:
       - db-mysql
+
+  maply-gateway:
+    build: ./maply-gateway
+    image: maply-gateway
+    container_name: maply-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - server-network
+    depends_on:
+      - maply-user-service
+      - maply-position-service
 
 networks:
   server-network:

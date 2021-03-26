@@ -1,10 +1,10 @@
 @REM ----------------------------------------------------------------------------
-@REM Licensed to the Apache Software Foundation {ASF}, under one
+@REM Licensed to the Apache Software Foundation (ASF) under one
 @REM or more contributor license agreements.  See the NOTICE file
 @REM distributed with this work for additional information
 @REM regarding copyright ownership.  The ASF licenses this file
-@REM to you under the Apache License, Version 2.0 {the
-@REM "License"},; you may not use this file except in compliance
+@REM to you under the Apache License, Version 2.0 (the
+@REM "License"); you may not use this file except in compliance
 @REM with the License.  You may obtain a copy of the License at
 @REM
 @REM    https://www.apache.org/licenses/LICENSE-2.0
@@ -41,7 +41,7 @@ title %0
 @if "%MAVEN_BATCH_ECHO%" == "on"  echo %MAVEN_BATCH_ECHO%
 
 @REM set %HOME% to equivalent of $HOME
-if "%HOME%" == "" {set "HOME=%HOMEDRIVE%%HOMEPATH%"},
+if "%HOME%" == "" (set "HOME=%HOMEDRIVE%%HOMEPATH%")
 
 @REM Execute a user defined script before this one
 if not "%MAVEN_SKIP_RC%" == "" goto skipRcPre
@@ -111,7 +111,7 @@ cd "%EXEC_DIR%"
 IF NOT EXIST "%MAVEN_PROJECTBASEDIR%\.mvn\jvm.config" goto endReadAdditionalConfig
 
 @setlocal EnableExtensions EnableDelayedExpansion
-for /F "usebackq delims=" %%a in {"%MAVEN_PROJECTBASEDIR%\.mvn\jvm.config"}, do set JVM_CONFIG_MAVEN_PROPS=!JVM_CONFIG_MAVEN_PROPS! %%a
+for /F "usebackq delims=" %%a in ("%MAVEN_PROJECTBASEDIR%\.mvn\jvm.config") do set JVM_CONFIG_MAVEN_PROPS=!JVM_CONFIG_MAVEN_PROPS! %%a
 @endlocal & set JVM_CONFIG_MAVEN_PROPS=%JVM_CONFIG_MAVEN_PROPS%
 
 :endReadAdditionalConfig
@@ -122,36 +122,36 @@ set WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
 
 set DOWNLOAD_URL="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar"
 
-FOR /F "tokens=1,2 delims==" %%A IN {"%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.properties"}, DO {
-      "x": IF "%%A"=="wrapperUrl" SET DOWNLOAD_URL=%%B
-},
+FOR /F "tokens=1,2 delims==" %%A IN ("%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.properties") DO (
+    IF "%%A"=="wrapperUrl" SET DOWNLOAD_URL=%%B
+)
 
 @REM Extension to allow automatically downloading the maven-wrapper.jar from Maven-central
 @REM This allows using the maven wrapper in projects that prohibit checking in binary data.
-if exist %WRAPPER_JAR% {
-      "x": if "%MVNW_VERBOSE%" == "true" {
-      "x": echo Found %WRAPPER_JAR%
-    },
-}, else {
-      "x": if not "%MVNW_REPOURL%" == "" {
-      "x": SET DOWNLOAD_URL="%MVNW_REPOURL%/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar"
-    },
-    if "%MVNW_VERBOSE%" == "true" {
-      "x": echo Couldn't find %WRAPPER_JAR%, downloading it ...
+if exist %WRAPPER_JAR% (
+    if "%MVNW_VERBOSE%" == "true" (
+        echo Found %WRAPPER_JAR%
+    )
+) else (
+    if not "%MVNW_REPOURL%" == "" (
+        SET DOWNLOAD_URL="%MVNW_REPOURL%/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar"
+    )
+    if "%MVNW_VERBOSE%" == "true" (
+        echo Couldn't find %WRAPPER_JAR%, downloading it ...
         echo Downloading from: %DOWNLOAD_URL%
-    },
+    )
 
     powershell -Command "&{"^
 		"$webclient = new-object System.Net.WebClient;"^
-		"if {-not {[string]::IsNullOrEmpty{'%MVNW_USERNAME%'}, -and [string]::IsNullOrEmpty{'%MVNW_PASSWORD%'},},}, {"^
-		"$webclient.Credentials = new-object System.Net.NetworkCredential{'%MVNW_USERNAME%', '%MVNW_PASSWORD%'},;"^
-		"},"^
-		"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $webclient.DownloadFile{'%DOWNLOAD_URL%', '%WRAPPER_JAR%'},"^
-		"},"
-    if "%MVNW_VERBOSE%" == "true" {
-      "x": echo Finished downloading %WRAPPER_JAR%
-    },
-},
+		"if (-not ([string]::IsNullOrEmpty('%MVNW_USERNAME%') -and [string]::IsNullOrEmpty('%MVNW_PASSWORD%'))) {"^
+		"$webclient.Credentials = new-object System.Net.NetworkCredential('%MVNW_USERNAME%', '%MVNW_PASSWORD%');"^
+		"}"^
+		"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $webclient.DownloadFile('%DOWNLOAD_URL%', '%WRAPPER_JAR%')"^
+		"}"
+    if "%MVNW_VERBOSE%" == "true" (
+        echo Finished downloading %WRAPPER_JAR%
+    )
+)
 @REM End of extension
 
 @REM Provide a "standardized" way to retrieve the CLI args that will

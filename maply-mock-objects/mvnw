@@ -1,11 +1,11 @@
 #!/bin/sh
 # ----------------------------------------------------------------------------
-# Licensed to the Apache Software Foundation {ASF}, under one
+# Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
 # regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 {the
-# "License"},; you may not use this file except in compliance
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
 # with the License.  You may obtain a copy of the License at
 #
 #    https://www.apache.org/licenses/LICENSE-2.0
@@ -51,9 +51,9 @@ cygwin=false;
 darwin=false;
 mingw=false
 case "`uname`" in
-  CYGWIN*}, cygwin=true ;;
-  MINGW*}, mingw=true;;
-  Darwin*}, darwin=true
+  CYGWIN*) cygwin=true ;;
+  MINGW*) mingw=true;;
+  Darwin*) darwin=true
     # Use /usr/libexec/java_home if available, otherwise fall back to /Library/Java/Home
     # See https://developer.apple.com/library/mac/qa/qa1170/_index.html
     if [ -z "$JAVA_HOME" ]; then
@@ -79,7 +79,7 @@ if [ -z "$M2_HOME" ] ; then
   # need this for relative symlinks
   while [ -h "$PRG" ] ; do
     ls=`ls -ld "$PRG"`
-    link=`expr "$ls" : '.*-> \{.*\},$'`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
     if expr "$link" : '/.*' > /dev/null; then
       PRG="$link"
     else
@@ -111,17 +111,17 @@ fi
 # For Mingw, ensure paths are in UNIX format before anything is touched
 if $mingw ; then
   [ -n "$M2_HOME" ] &&
-    M2_HOME="`{cd "$M2_HOME"; pwd},`"
+    M2_HOME="`(cd "$M2_HOME"; pwd)`"
   [ -n "$JAVA_HOME" ] &&
-    JAVA_HOME="`{cd "$JAVA_HOME"; pwd},`"
+    JAVA_HOME="`(cd "$JAVA_HOME"; pwd)`"
 fi
 
 if [ -z "$JAVA_HOME" ]; then
   javaExecutable="`which javac`"
-  if [ -n "$javaExecutable" ] && ! [ "`expr \"$javaExecutable\" : '\{[^ ]*\},'`" = "no" ]; then
-    # readlink{1}, is not available as standard on Solaris 10.
+  if [ -n "$javaExecutable" ] && ! [ "`expr \"$javaExecutable\" : '\([^ ]*\)'`" = "no" ]; then
+    # readlink(1) is not available as standard on Solaris 10.
     readLink=`which readlink`
-    if [ ! `expr "$readLink" : '\{[^ ]*\},'` = "no" ]; then
+    if [ ! `expr "$readLink" : '\([^ ]*\)'` = "no" ]; then
       if $darwin ; then
         javaHome="`dirname \"$javaExecutable\"`"
         javaExecutable="`cd \"$javaHome\" && pwd -P`/javac"
@@ -129,7 +129,7 @@ if [ -z "$JAVA_HOME" ]; then
         javaExecutable="`readlink -f \"$javaExecutable\"`"
       fi
       javaHome="`dirname \"$javaExecutable\"`"
-      javaHome=`expr "$javaHome" : '\{.*\},/bin'`
+      javaHome=`expr "$javaHome" : '\(.*\)/bin'`
       JAVA_HOME="$javaHome"
       export JAVA_HOME
     fi
@@ -163,8 +163,9 @@ CLASSWORLDS_LAUNCHER=org.codehaus.plexus.classworlds.launcher.Launcher
 
 # traverses directory structure from process work directory to filesystem root
 # first directory with .mvn subdirectory is considered project base directory
-find_maven_basedir{}, {
-      "x": if [ -z "$1" ]
+find_maven_basedir() {
+
+  if [ -z "$1" ]
   then
     echo "Path not specified to find_maven_basedir"
     return 1
@@ -177,23 +178,23 @@ find_maven_basedir{}, {
       basedir=$wdir
       break
     fi
-    # workaround for JBEAP-8937 {on Solaris 10/Sparc},
-    if [ -d "${wdir}," ]; then
+    # workaround for JBEAP-8937 (on Solaris 10/Sparc)
+    if [ -d "${wdir}" ]; then
       wdir=`cd "$wdir/.."; pwd`
     fi
     # end of workaround
   done
-  echo "${basedir},"
-},
+  echo "${basedir}"
+}
 
 # concatenates all lines of a file
-concat_lines{}, {
-      "x": if [ -f "$1" ]; then
-    echo "${tr -s '\n' ' ' < "$1"},"
+concat_lines() {
+  if [ -f "$1" ]; then
+    echo "$(tr -s '\n' ' ' < "$1")"
   fi
-},
+}
 
-BASE_DIR=`find_maven_basedir "${pwd},"`
+BASE_DIR=`find_maven_basedir "$(pwd)"`
 if [ -z "$BASE_DIR" ]; then
   exit 1;
 fi
@@ -216,7 +217,7 @@ else
       jarUrl="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar"
     fi
     while IFS="=" read key value; do
-      case "$key" in {wrapperUrl}, jarUrl="$value"; break ;;
+      case "$key" in (wrapperUrl) jarUrl="$value"; break ;;
       esac
     done < "$BASE_DIR/.mvn/wrapper/maven-wrapper.properties"
     if [ "$MVNW_VERBOSE" = true ]; then
@@ -261,14 +262,14 @@ else
                   echo " - Compiling MavenWrapperDownloader.java ..."
                 fi
                 # Compiling the Java class
-                {"$JAVA_HOME/bin/javac" "$javaClass"},
+                ("$JAVA_HOME/bin/javac" "$javaClass")
             fi
             if [ -e "$BASE_DIR/.mvn/wrapper/MavenWrapperDownloader.class" ]; then
                 # Running the downloader
                 if [ "$MVNW_VERBOSE" = true ]; then
                   echo " - Running MavenWrapperDownloader.java ..."
                 fi
-                {"$JAVA_HOME/bin/java" -cp .mvn/wrapper MavenWrapperDownloader "$MAVEN_PROJECTBASEDIR"},
+                ("$JAVA_HOME/bin/java" -cp .mvn/wrapper MavenWrapperDownloader "$MAVEN_PROJECTBASEDIR")
             fi
         fi
     fi
@@ -277,11 +278,11 @@ fi
 # End of extension
 ##########################################################################################
 
-export MAVEN_PROJECTBASEDIR=${MAVEN_BASEDIR:-"$BASE_DIR"},
+export MAVEN_PROJECTBASEDIR=${MAVEN_BASEDIR:-"$BASE_DIR"}
 if [ "$MVNW_VERBOSE" = true ]; then
   echo $MAVEN_PROJECTBASEDIR
 fi
-MAVEN_OPTS="${concat_lines "$MAVEN_PROJECTBASEDIR/.mvn/jvm.config"}, $MAVEN_OPTS"
+MAVEN_OPTS="$(concat_lines "$MAVEN_PROJECTBASEDIR/.mvn/jvm.config") $MAVEN_OPTS"
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then
@@ -305,5 +306,5 @@ WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
 exec "$JAVACMD" \
   $MAVEN_OPTS \
   -classpath "$MAVEN_PROJECTBASEDIR/.mvn/wrapper/maven-wrapper.jar" \
-  "-Dmaven.home=${M2_HOME}," "-Dmaven.multiModuleProjectDirectory=${MAVEN_PROJECTBASEDIR}," \
-  ${WRAPPER_LAUNCHER}, $MAVEN_CONFIG "$@"
+  "-Dmaven.home=${M2_HOME}" "-Dmaven.multiModuleProjectDirectory=${MAVEN_PROJECTBASEDIR}" \
+  ${WRAPPER_LAUNCHER} $MAVEN_CONFIG "$@"
