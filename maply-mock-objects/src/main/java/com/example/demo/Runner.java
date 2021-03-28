@@ -71,6 +71,7 @@ public class Runner implements CommandLineRunner {
             Flux
                     .interval(Duration.ofSeconds(5))
                     .zipWith(coordinatesFlux, (tick, coordinate) -> {
+                        System.out.println(String.format("Username: %s, {lat = %s, lng = %s}", coordinate.getUsername(), coordinate.getX(), coordinate.getY()));
                         return webClient
                                 .post()
                                 .contentType(MediaType.APPLICATION_JSON)

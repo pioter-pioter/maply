@@ -1,11 +1,7 @@
 # Maply
-This project demonstrates usage of reactive programming. Maply visualises position of group of users, on the map. User coordinates are updated in real-time.
+This project demonstrates usage of reactive programming. Maply tracks position of a group of users, and visualises it on the map. Users' coordinates are updated in real-time.
 
-## Description
-
-
-
-![spring cloud gateway](images/architecture.png)
+![architecture](images/architecture.png)
 
 ## Services:
 
@@ -15,8 +11,7 @@ This project demonstrates usage of reactive programming. Maply visualises positi
 | [maply-position-service](https://github.com/pioter-pioter/maply/tree/master/maply-position-service) | 8081          | Uses Redis Streams to stream position data. Streaming is done via Server-Sent Events and WebSocket.          |
 | [maply-gateway](https://github.com/pioter-pioter/maply/tree/master/maply-gateway)                   | 8080          | API gateway. Forwards requests to proper services.          |
 
-
-#### How to build and run?
+## How to build and run?
 
  * Download/Clone the repository : 
    
@@ -37,7 +32,7 @@ This project demonstrates usage of reactive programming. Maply visualises positi
 	 $ npm install
 	 $ ng serve
 	  ```
- * Go to `http://localhost:4200` in your browser:
+ * Go to `http://localhost:4200` in your browser.
  * To run fake position data source:
 
 	  ```
