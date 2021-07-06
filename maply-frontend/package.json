@@ -17,7 +17,7 @@
     "@angular/core": "~9.1.1",
     "@angular/forms": "~9.1.1",
     "@angular/platform-browser": "~9.1.1",
-    "@angular/platform-browser-dynamic": "~9.1.1",
+    "@angular/platform-browser-dynamic": "~12.1.0",
     "@angular/router": "~9.1.1",
     "@types/mapbox-gl": "^1.12.8",
     "bootstrap": "^4.5.3",
